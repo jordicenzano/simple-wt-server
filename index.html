@@ -1,0 +1,24 @@
+<!doctype html>
+<head>
+    <title>Test WT</title>
+    <body onload="connectWT();"></body>
+</head>
+
+<script>
+    async function connectWT() {
+        try {
+            const url = "https://localhost:443"
+            const wt = new WebTransport(url);
+            wt.closed.then(() => {
+                console.log(`The HTTP/3 connection to ${url} closed gracefully.`);
+            }).catch((error) => {
+                console.error(`The HTTP/3 connection to ${url} closed due to ${error}.`);
+            });
+            await wt.ready;
+        }
+        catch(error) {
+            throw error;
+        }
+    }
+</script>
+    
