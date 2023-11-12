@@ -1,6 +1,6 @@
 # simple-wt-server
 
-This code just a (alleged) but in (webtransport-go) that prevents Chrome to establish a WT session
+This code is just to show an (alleged) bug in (webtransport-go) that prevents Chrome to establish a WT session
 
 ## Repro steps
 
