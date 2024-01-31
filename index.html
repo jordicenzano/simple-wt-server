@@ -5,20 +5,38 @@
 </head>
 
 <script>
+    function base64ToArrayBuffer(base64) {
+        var binaryString = atob(base64);
+        var bytes = new Uint8Array(binaryString.length);
+        for (var i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+        }
+        return bytes.buffer;
+    }
+
     async function connectWT() {
         try {
-            const url = "https://localhost:443"
-            const wt = new WebTransport(url);
+            const url = "https://localhost:4433/webtransport"
+            const certHash = "6wXrIpTaSxcQzXqp1kg7pYpmNfx6l9yDE9Ivwm1QvbU="
+            console.log(`Connecting to: ${url} with hash: ${certHash}`);
+
+            options = { 
+                serverCertificateHashes: [{
+                algorithm: 'sha-256',
+                value: base64ToArrayBuffer(certHash)}]
+            }
+
+            const wt = new WebTransport(url, options);
             wt.closed.then(() => {
                 console.log(`The HTTP/3 connection to ${url} closed gracefully.`);
             }).catch((error) => {
                 console.error(`The HTTP/3 connection to ${url} closed due to ${error}.`);
             });
             await wt.ready;
+            console.log(`WT connection ready!`);
         }
         catch(error) {
             throw error;
         }
     }
 </script>
-    

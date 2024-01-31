@@ -4,8 +4,8 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 
-from http.server import HTTPServer, SimpleHTTPRequestHandler, test
-import sys
+from http.server import HTTPServer, BaseHTTPRequestHandler, SimpleHTTPRequestHandler
+import ssl
 
 class CORSRequestHandler (SimpleHTTPRequestHandler):
     def end_headers (self):
@@ -14,5 +14,10 @@ class CORSRequestHandler (SimpleHTTPRequestHandler):
         self.send_header('Cross-Origin-Embedder-Policy', 'require-corp')
         SimpleHTTPRequestHandler.end_headers(self)
 
-if __name__ == '__main__':
-    test(CORSRequestHandler, HTTPServer, port=int(sys.argv[1]) if len(sys.argv) > 1 else 8080)
+httpd = HTTPServer(('localhost', 4443), CORSRequestHandler)
+
+httpd.socket = ssl.wrap_socket (httpd.socket, 
+        keyfile="/Users/jcenzano/.ssh/localhost-key.pem", 
+        certfile='/Users/jcenzano/.ssh/localhost.pem', server_side=True)
+
+httpd.serve_forever()

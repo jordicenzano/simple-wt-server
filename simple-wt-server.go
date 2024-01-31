@@ -8,10 +8,10 @@ import (
 	"github.com/quic-go/webtransport-go"
 )
 
-func main() {
-	// create a new webtransport.Server, listening on (UDP) port 443
+func mainSrv() {
+	// create a new webtransport.Server, listening on (UDP) port 4433
 	s := webtransport.Server{
-		H3: http3.Server{Addr: ":443"},
+		H3: http3.Server{Addr: ":4433"},
 	}
 
 	// Create a new HTTP endpoint /webtransport.
@@ -25,5 +25,5 @@ func main() {
 		// Handle the connection. Here goes the application logic.
 	})
 
-	s.ListenAndServeTLS("../certs/certificate.pem", "../certs/certificate.key")
+	s.ListenAndServeTLS("/Users/jcenzano/.ssh/localhost.pem", "/Users/jcenzano/.ssh/localhost-key.pem")
 }
